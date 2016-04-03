@@ -20,15 +20,18 @@ module Lambda where
 
 	-- The class "Show" is used for converting lambda expressions into a 
 	-- typographical representation. Note that applicative expressions have five
-	-- special cases in order to avoid unnecessary parentheses (even though
-	-- parentheses do have aesthetical value in some cases which this algorithm
-	-- doesn't recognise).
+	-- special cases in order to avoid unnecessary parentheses.
 	instance Show (LExpr a) where
 		-- Single variables can be printed just plainly.
 		show (LVar x)				= [x]
 		-- Abstraction starts with the lambda ('λ') symbol and has a delimiter
 		-- symbol '.' for readability.
 		show (LAbs x f) 			= "λ" ++ (show x) ++ "." ++ (show f)
+		-- This rule is not syntactically necessary, but it makes the 
+		-- expressions look more aesthetical (e.g. "(λx.xx)(λx.xx)" vs. 
+		-- "(λx.xx)λx.xx").
+		show (LApp (LAbs x e) (LAbs y f)) = "(" ++ show (LAbs x e) ++ ")" ++
+		                                        "(" ++ show (LAbs y f) ++ ")"
 		-- Abstraction has no terminator symbol, so applying to abstraction
 		-- requires parentheses around abstraction in order to prevent 
 		-- ambiguity.
