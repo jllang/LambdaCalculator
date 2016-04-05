@@ -30,8 +30,11 @@ module Lambda where
         -- This rule is not syntactically necessary, but it makes the 
         -- expressions look more aesthetical (e.g. "(λx.xx)(λx.xx)" vs. 
         -- "(λx.xx)λx.xx").
-        show (LApp (LAbs x e) (LAbs y f)) = "(" ++ show (LAbs x e) ++ ")" ++
-                                                "(" ++ show (LAbs y f) ++ ")"
+        show (LApp (LAbs x e) (LAbs y f)) = "(" ++ show (LAbs x e) ++ ")(" ++
+                                            show (LAbs y f) ++ ")"
+        --
+        show (LApp (LAbs x e) (LApp f g)) = "(" ++ show (LAbs x e) ++ ")(" ++ 
+                                            show (LApp f g) ++ ")"
         -- Abstraction has no terminator symbol, so applying to abstraction
         -- requires parentheses around abstraction in order to prevent 
         -- ambiguity.
